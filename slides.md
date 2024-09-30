@@ -40,10 +40,17 @@ transition: fade-out
 
 **基本数据类型是 CPU 可以直接进行运算的类型**，在算法中直接被使用，主要包括以下几种。
 
+<v-clicks>
+
 - 整数类型 `byte`、`short`、`int`、`long` 。
+
 - 浮点数类型 `float`、`double` ，用于表示小数。
+
 - 字符类型 `char` ，用于表示各种语言的字母、标点符号甚至表情符号等。
+
 - 布尔类型 `bool` ，用于表示“是”与“否”判断。
+
+</v-clicks>
 
 ---
 transition: slide-up
@@ -80,11 +87,14 @@ transition: slide-left
 ## 不同语言的基本数据类型
 
 请注意，上表针对的是 Java 的基本数据类型的情况。每种编程语言都有各自的数据类型定义，它们的占用空间、取值范围和默认值可能会有所不同。
+<v-clicks>
 
 - 在 Python 中，整数类型 `int` 可以是任意大小，只受限于可用内存；浮点数 `float` 是双精度 64 位；没有 `char` 类型，单个字符实际上是长度为 1 的字符串 `str` 。
 - C 和 C++ 未明确规定基本数据类型的大小，而因实现和平台各异。上表遵循 LP64 数据模型，其用于包括 Linux 和 macOS 在内的 Unix 64 位操作系统。
 - 字符 `char` 的大小在 C 和 C++ 中为 1 字节，在大多数编程语言中取决于特定的字符编码方法，详见“字符编码”章节。
 - 即使表示布尔量仅需 1 位（$0$ 或 $1$），它在内存中通常也存储为 1 字节。这是因为现代计算机 CPU 通常将 1 字节作为最小寻址内存单元。
+
+</v-clicks>
 
 ---
 image: https://cover.sli.dev
@@ -156,6 +166,23 @@ transition: fade-out
 
 ---
 
+## 尝试一下？
+
+在计算机中，所有数据都是以二进制数的形式存储的，字符 `char` 也不例外。
+
+```python {monaco-run}
+
+# 示例：将字符转换为二进制表示
+def char_to_binary(char):
+    return format(ord(char), '08b')
+
+char = 'A'
+binary_representation = char_to_binary(char)
+print(f"字符 '{char}' 的二进制表示为: {binary_representation}")
+```
+
+---
+
 ## ASCII 字符集
 
 <u>ASCII 码</u>是最早出现的字符集，其全称为 American Standard Code for Information Interchange（美国标准信息交换代码）。它使用 7 位二进制数（一个字节的低 7 位）表示一个字符，最多能够表示 128 个不同的字符。如下图所示，ASCII 码包括英文字母的大小写、数字 0 ~ 9、一些标点符号，以及一些控制字符（如换行符和制表符）。
@@ -166,6 +193,23 @@ transition: fade-out
 
 ---
 
+## ASCII 字符集
+
+ASCII 码使用 7 位二进制数表示一个字符
+
+```python {monaco-run}
+# ASCII 字符集演示
+# ASCII 码使用 7 位二进制数表示一个字符
+
+# 示例：打印 ASCII 字符集的前 128 个字符
+for i in range(128):
+    print(f"{i:3}: {chr(i):<2}", end=' ')
+    if (i + 1) % 16 == 0:
+        print()
+```
+
+---
+
 ## EASCII 字符集
 
 在世界范围内，陆续出现了一批适用于不同地区的 EASCII 字符集。这些字符集的前 128 个字符统一为 ASCII 码，后 128 个字符定义不同，以适应不同语言的需求。
@@ -173,7 +217,24 @@ transition: fade-out
 <!-- ![EASCII](public/character_encoding/ascii_table.png) -->
 
 ---
-transition: slide-right
+
+## EASCII 字符集
+
+EASCII 在 ASCII 的基础上扩展到 8 位，能够表示 256 个不同的字符
+
+```python {monaco-run}
+# EASCII 在 ASCII 的基础上扩展到 8 位，能够表示 256 个不同的字符
+
+# 打印 EASCII 字符集的前 256 个字符
+for i in range(256):
+    print(f"{i:3}: {chr(i):<2}", end=' ')
+    if (i + 1) % 16 == 0:
+        print()
+
+```
+
+---
+transition: slide-left
 ---
 
 ## GBK 字符集
@@ -195,6 +256,26 @@ transition: slide-up
 <u>Unicode</u> 的中文名称为“统一码”，理论上能容纳 100 多万个字符。它致力于将全球范围内的字符纳入统一的字符集之中，提供一种通用的字符集来处理和显示各种语言文字，减少因为编码标准不同而产生的乱码问题。
 
 ---
+
+## Unicode 字符集
+
+Unicode 字符集致力于将全球范围内的字符纳入统一的字符集之中。
+
+```python {monaco-run}
+
+# Unicode 包含各种语言的字符、符号甚至表情符号
+
+def char_to_unicode(char):
+    return f"U+{ord(char):04X}"
+
+# 示例：显示多个字符的 Unicode 编码
+chars = ['A', '汉', '😊']
+for char in chars:
+    unicode_representation = char_to_unicode(char)
+    print(f"字符 '{char}' 的 Unicode 编码为: {unicode_representation}")
+```
+
+---
 image: https://cover.sli.dev
 ---
 
@@ -205,6 +286,11 @@ image: https://cover.sli.dev
 Unicode 是一种通用字符集，本质上是给每个字符分配一个编号（称为“码点”），**但它并没有规定在计算机中如何存储这些字符码点**。我们不禁会问：当多种长度的 Unicode 码点同时出现在一个文本中时，系统如何解析字符？例如给定一个长度为 2 字节的编码，系统如何确认它是一个 2 字节的字符还是两个 1 字节的字符？
 
 ---
+layout: image
+image: /character_encoding/unicode_hello_algo.png
+---
+
+---
 transition: slide-left
 ---
 
@@ -213,29 +299,68 @@ transition: slide-left
 目前，UTF-8 已成为国际上使用最广泛的 Unicode 编码方法。**它是一种可变长度的编码**，使用 1 到 4 字节来表示一个字符，根据字符的复杂性而变。ASCII 字符只需 1 字节，拉丁字母和希腊字母需要 2 字节，常用的中文字符需要 3 字节，其他的一些生僻字符需要 4 字节。
 
 UTF-8 的编码规则并不复杂，分为以下两种情况。
+<v-clicks>
 
 - 对于长度为 1 字节的字符，将最高位设置为 $0$ ，其余 7 位设置为 Unicode 码点。值得注意的是，ASCII 字符在 Unicode 字符集中占据了前 128 个码点。也就是说，**UTF-8 编码可以向下兼容 ASCII 码**。这意味着我们可以使用 UTF-8 来解析年代久远的 ASCII 码文本。
 - 对于长度为 $n$ 字节的字符（其中 $n > 1$），将首个字节的高 $n$ 位都设置为 $1$ ，第 $n + 1$ 位设置为 $0$ ；从第二个字节开始，将每个字节的高 2 位都设置为 $10$ ；其余所有位用于填充字符的 Unicode 码点。
 
+</v-clicks>
+
 ---
 
-## UTF-8 编码示例
+## UTF-8 编码
 
 下图展示了 “Hello算法” 对应的 UTF-8 编码。观察发现，由于最高 $n$ 位都设置为 $1$ ，因此系统可以通过读取最高位 $1$ 的个数来解析出字符的长度为 $n$ 。
 
-但为什么要将其余所有字节的高 2 位都设置为 $10$ 呢？实际上，这个 $10$ 能够起到校验符的作用。假设系统从一个错误的字节开始解析文本，字节头部的 $10$ 能够帮助系统快速判断出异常。
+<img style="height: 90%;" src="/character_encoding/utf-8_hello_algo.png"/>
+
+---
+
+## UTF-8 编码
+
+UTF-8 是一种可变长度的编码，使用 1 到 4 字节来表示一个字符
+
+```python {monaco-run}
+text = "Hello算法"
+utf8_representation = text.encode('utf-8')
+print(f"文本 '{text}' 的 UTF-8 编码为: {utf8_representation}")
+```
+
+---
+
+## UTF-8 编码
+
+问题来了：
+
+>但为什么要将其余所有字节的高 2 位都设置为 $10$ 呢？
+
+<v-click>
+
+实际上，这个 $10$ 能够起到校验符的作用。假设系统从一个错误的字节开始解析文本，字节头部的 $10$ 能够帮助系统快速判断出异常。
 
 之所以将 $10$ 当作校验符，是因为在 UTF-8 编码规则下，不可能有字符的最高两位是 $10$ 。这个结论可以用反证法来证明：假设一个字符的最高两位是 $10$ ，说明该字符的长度为 $1$ ，对应 ASCII 码。而 ASCII 码的最高位应该是 $0$ ，与假设矛盾。
 
----
-layout: image
-image: /character_encoding/unicode_hello_algo.png
----
+</v-click>
 
 ---
-layout: image
-image: /character_encoding/utf-8_hello_algo.png
----
+
+## UTF-8 编码示例（校验符）
+
+解释为什么 UTF-8 编码的其余字节的高 2 位都设置为 10
+
+```python {monaco-run}
+# 显示 UTF-8 编码的校验符
+def utf8_validation(byte_sequence):
+    for byte in byte_sequence:
+        if byte & 0b11000000 == 0b10000000:
+            print(f"字节 {format(byte, '08b')} 是一个有效的 UTF-8 校验符")
+
+def char_to_utf8(char):
+    return char.encode('utf-8')
+
+utf8_representation = char_to_utf8('汉')
+utf8_validation(utf8_representation)
+```
 
 ---
 transition: slide-up
@@ -245,6 +370,8 @@ transition: slide-up
 
 除了 UTF-8 之外，常见的编码方式还包括以下两种。
 
+<v-clicks>
+
 - **UTF-16 编码**：使用 2 或 4 字节来表示一个字符。所有的 ASCII 字符和常用的非英文字符，都用 2 字节表示；少数字符需要用到 4 字节表示。对于 2 字节的字符，UTF-16 编码与 Unicode 码点相等。
 - **UTF-32 编码**：每个字符都使用 4 字节。这意味着 UTF-32 比 UTF-8 和 UTF-16 更占用空间，特别是对于 ASCII 字符占比较高的文本。
 
@@ -252,15 +379,41 @@ transition: slide-up
 
 从兼容性的角度看，UTF-8 的通用性最佳，许多工具和库优先支持 UTF-8 。
 
+</v-clicks>
+
+---
+
+## 其他编码方式
+
+<br>
+```python {monaco-run}
+# 显示字符的 UTF-16 和 UTF-32 编码
+def char_to_utf16(char):
+    return char.encode('utf-16')
+
+def char_to_utf32(char):
+    return char.encode('utf-32')
+
+char = '汉'
+utf16_representation = char_to_utf16(char)
+utf32_representation = char_to_utf32(char)
+print(f"字符 '{char}' 的 UTF-16 编码为: {utf16_representation}")
+print(f"字符 '{char}' 的 UTF-32 编码为: {utf32_representation}")
+```
+
 ---
 
 ## 编程语言的字符编码
 
-对于以往的大多数编程语言，程序运行中的字符串都采用 UTF-16 或 UTF-32 这类等长编码。在等长编码下，我们可以将字符串看作数组来处理，这种做法具有以下优点。
+对于有一定历史的编程语言，程序运行时所用到的字符串都采用 UTF-16 或 UTF-32 这类等长编码。在等长编码下，我们可以将字符串看作数组来处理，这种做法具有以下优点。
+
+<v-clicks>
 
 - **随机访问**：UTF-16 编码的字符串可以很容易地进行随机访问。UTF-8 是一种变长编码，要想找到第 $i$ 个字符，我们需要从字符串的开始处遍历到第 $i$ 个字符，这需要 $O(n)$ 的时间。
 - **字符计数**：与随机访问类似，计算 UTF-16 编码的字符串的长度也是 $O(1)$ 的操作。但是，计算 UTF-8 编码的字符串的长度需要遍历整个字符串。
 - **字符串操作**：在 UTF-16 编码的字符串上，很多字符串操作（如分割、连接、插入、删除等）更容易进行。在 UTF-8 编码的字符串上，进行这些操作通常需要额外的计算，以确保不会产生无效的 UTF-8 编码。
+
+</v-clicks>
 
 ---
 transition: slide-left
@@ -270,9 +423,13 @@ transition: slide-left
 
 实际上，编程语言的字符编码方案设计是一个很有趣的话题，涉及许多因素。
 
+<v-clicks>
+
 - Java 的 `String` 类型使用 UTF-16 编码，每个字符占用 2 字节。这是因为 Java 语言设计之初，人们认为 16 位足以表示所有可能的字符。然而，这是一个不正确的判断。后来 Unicode 规范扩展到了超过 16 位，所以 Java 中的字符现在可能由一对 16 位的值（称为“代理对”）表示。
 - JavaScript 和 TypeScript 的字符串使用 UTF-16 编码的原因与 Java 类似。当 1995 年 Netscape 公司首次推出 JavaScript 语言时，Unicode 还处于发展早期，那时候使用 16 位的编码就足以表示所有的 Unicode 字符了。
 - C# 使用 UTF-16 编码，主要是因为 .NET 平台是由 Microsoft 设计的，而 Microsoft 的很多技术（包括 Windows 操作系统）都广泛使用 UTF-16 编码。
+
+</v-clicks>
 
 ---
 
@@ -280,13 +437,15 @@ transition: slide-left
 
 出于以上原因，部分编程语言提出了一些不同的编码方案。
 
+<v-clicks>
+
 - Python 中的 `str` 使用 Unicode 编码，并采用一种灵活的字符串表示，存储的字符长度取决于字符串中最大的 Unicode 码点。若字符串中全部是 ASCII 字符，则每个字符占用 1 字节；如果有字符超出了 ASCII 范围，但全部在基本多语言平面（BMP）内，则每个字符占用 2 字节；如果有超出 BMP 的字符，则每个字符占用 4 字节。
 - Go 语言的 `string` 类型在内部使用 UTF-8 编码。Go 语言还提供了 `rune` 类型，它用于表示单个 Unicode 码点。
 - Rust 语言的 `str` 和 `String` 类型在内部使用 UTF-8 编码。Rust 也提供了 `char` 类型，用于表示单个 Unicode 码点。
 
-::right::
-
 需要注意的是，以上讨论的都是字符串在编程语言中的存储方式，**这和字符串如何在文件中存储或在网络中传输是不同的问题**。在文件存储或网络传输中，我们通常会将字符串编码为 UTF-8 格式，以达到最优的兼容性和空间效率。
+
+</v-clicks>
 
 ---
 transition: slide-up
@@ -320,9 +479,13 @@ transition: fade-out
 
 首先需要指出，**数字是以“补码”的形式存储在计算机中的**。在分析这样做的原因之前，首先给出三者的定义。
 
+<v-clicks>
+
 - **原码**：我们将数字的二进制表示的最高位视为符号位，其中 $0$ 表示正数，$1$ 表示负数，其余位表示数字的值。
 - **反码**：正数的反码与其原码相同，负数的反码是对其原码除符号位外的所有位取反。
 - **补码**：正数的补码与其原码相同，负数的补码是在其反码的基础上加 $1$ 。
+
+</v-clicks>
 
 ---
 image: /number_encoding/1s_2s_complement.png
@@ -332,7 +495,7 @@ image: /number_encoding/1s_2s_complement.png
 
 下图展示了原码、反码和补码之间的转换方法。
 
-**原码（sign-magnitude）** 虽然最直观，但存在一些局限性。一方面，**负数的原码不能直接用于运算**。例如在原码下计算 $1 + (-2)$ ，得到的结果是 $-3$ ，这显然是不对的。
+**原码（sign-magnitude）** 虽然最直观，但存在一些局限性。比如说，**负数的原码不能直接用于运算**。例如在原码下计算 $1 + (-2)$ ，得到的结果是 $-3$ ，这显然是不对的。
 
 $$
 \begin{aligned}
@@ -349,7 +512,7 @@ transition: slide-up
 
 ## 反码解决方案
 
-为了解决此问题，计算机引入了<u>反码（1's complement）</u>。如果我们先将原码转换为反码，并在反码下计算 $1 + (-2)$ ，最后将结果从反码转换回原码，则可得到正确结果 $-1$ 。
+为了解决此问题，我们引入了**反码（1's complement）**。如果我们先将原码转换为反码，并在反码下计算 $1 + (-2)$ ，最后将结果从反码转换回原码，就可以得到正确结果 $-1$ 。
 
 $$
 \begin{aligned}
@@ -363,12 +526,14 @@ $$
 $$
 
 ---
-transition: slide-right
+transition: slide-left
 ---
 
 ## 正负零的歧义
 
-另一方面，**数字零的原码有 $+0$ 和 $-0$ 两种表示方式**。这意味着数字零对应两个不同的二进制编码，这可能会带来歧义。比如在条件判断中，如果没有区分正零和负零，则可能会导致判断结果出错。而如果我们想处理正零和负零歧义，则需要引入额外的判断操作，这可能会降低计算机的运算效率。
+但同时，我们发现**数字零的原码有 $+0$ 和 $-0$ 两种表示方式**。
+
+这意味着数字零对应两个不同的二进制编码，这可能会带来歧义。比如在条件判断中，如果没有区分正零和负零，则可能会导致判断结果出错。而如果我们想处理正零和负零歧义，就需要引入额外的判断操作，这可能会降低计算机的运算效率。
 
 $$
 \begin{aligned}
@@ -434,7 +599,7 @@ transition: slide-left
 
 现在我们可以总结出计算机使用补码的原因：基于补码表示，计算机可以用同样的电路和操作来处理正数和负数的加法，不需要设计特殊的硬件电路来处理减法，并且无须特别处理正负零的歧义问题。这大大简化了硬件设计，提高了运算效率。
 
-补码的设计非常精妙，因篇幅关系我们就先介绍到这里，建议有兴趣的读者进一步深入了解。
+补码的设计非常精妙，我们就先介绍到这里，感兴趣的同学可以进一步深入了解。
 
 ---
 transition: slide-up
@@ -444,11 +609,16 @@ transition: slide-up
 
 细心的你可能会发现：`int` 和 `float` 长度相同，都是 4 字节 ，但为什么 `float` 的取值范围远大于 `int` ？这非常反直觉，因为按理说 `float` 需要表示小数，取值范围应该变小才对。
 
+<v-clicks>
+
 实际上，**这是因为浮点数 `float` 采用了不同的表示方式**。记一个 32 比特长度的二进制数为：
 
 $$
 b_{31} b_{30} b_{29} \ldots b_2 b_1 b_0
 $$
+
+</v-clicks>
+<v-click>
 
 根据 IEEE 754 标准，32-bit 长度的 `float` 由以下三个部分构成。
 
@@ -456,11 +626,13 @@ $$
 - 指数位 $\mathrm{E}$ ：占 8 位 ，对应 $b_{30} b_{29} \ldots b_{23}$ 。
 - 分数位 $\mathrm{N}$ ：占 23 位 ，对应 $b_{22} b_{21} \ldots b_0$ 。
 
+</v-click>
+
 ---
 image: number_encoding/ieee_754_float.png
 ---
 
-## 浮点数编码示例
+## 浮点数编码
 
 二进制数 `float` 对应值的计算方法为：
 
@@ -468,11 +640,16 @@ $$
 \text {val} = (-1)^{b_{31}} \times 2^{\left(b_{30} b_{29} \ldots b_{23}\right)_2-127} \times\left(1 . b_{22} b_{21} \ldots b_0\right)_2
 $$
 
+<v-click>
+
 转化到十进制下的计算公式为：
 
 $$
 \text {val}=(-1)^{\mathrm{S}} \times 2^{\mathrm{E} -127} \times (1 + \mathrm{N})
 $$
+
+</v-click>
+<v-click>
 
 其中各项的取值范围为：
 
@@ -482,6 +659,8 @@ $$
 (1 + \mathrm{N}) = & (1 + \sum_{i=1}^{23} b_{23-i} 2^{-i}) \subset [1, 2 - 2^{-23}]
 \end{aligned}
 $$
+
+</v-click>
 
 ---
 layout: image
@@ -495,15 +674,17 @@ transition: slide-left
 
 ## 浮点数的取值范围
 
-现在我们可以回答最初的问题：**`float` 的表示方式包含指数位，导致其取值范围远大于 `int`** 。根据以上计算，`float` 可表示的最大正数为 $2^{254 - 127} \times (2 - 2^{-23}) \approx 3.4 \times 10^{38}$ ，切换符号位便可得到最小负数。
+现在我们可以回答最初的问题：
 
-**尽管浮点数 `float` 扩展了取值范围，但其副作用是牺牲了精度**。整数类型 `int` 将全部 32 比特用于表示数字，数字是均匀分布的；而由于指数位的存在，浮点数 `float` 的数值越大，相邻两个数字之间的差值就会趋向越大。
+`float` 的表示方式**包含指数位**，导致其取值范围远大于 `int`。根据以上计算，`float` 可表示的最大正数为 $2^{254 - 127} \times (2 - 2^{-23}) \approx 3.4 \times 10^{38}$ ，切换符号位便可得到最小负数。
+
+尽管浮点数 `float` 扩展了取值范围，但其副作用是**牺牲了精度**。整数类型 `int` 将全部 32 比特用于表示数字，数字是均匀分布的；而由于指数位的存在，浮点数 `float` 的数值越大，相邻两个数字之间的差值就会趋向越大。
 
 ---
 transition: slide-up
 ---
 
-## 特殊情况
+## `float` 的特殊情况
 
 如下表所示，指数位 $\mathrm{E} = 0$ 和 $\mathrm{E} = 255$ 具有特殊含义，**用于表示零、无穷大、$\mathrm{NaN}$ 等**。
 
@@ -526,7 +707,9 @@ transition: slide-left
 
 ## 总结
 
-数字编码在计算机中扮演着重要角色。理解原码、反码和补码，以及浮点数的编码方式，有助于我们更好地理解计算机的运作原理和提高编程效率。
+数字编码在计算机中扮演着重要角色。
+
+理解原码、反码和补码，以及浮点数的编码方式，有助于我们更好地理解计算机的运作原理和提高编程效率。
 
 ---
 
@@ -537,18 +720,19 @@ transition: slide-left
 <Toc mode="onlyCurrentTree" />
 
 ---
-transition: fade-out
----
-
-## 逻辑结构：线性与非线性
-
-**逻辑结构揭示了数据元素之间的逻辑关系**。在数组和链表中，数据按照一定顺序排列，体现了数据之间的线性关系；而在树中，数据从顶部向下按层次排列，表现出“祖先”与“后代”之间的派生关系；图则由节点和边构成，反映了复杂的网络关系。
-
----
 transition: slide-up
 ---
 
 ## 逻辑结构分类
+
+逻辑结构揭示了数据元素之间的逻辑关系。
+
+<v-clicks>
+
+- 在**数组和链表**中，数据按照一定顺序排列，体现了数据之间的线性关系；
+- 而在**树**中，数据从顶部向下按层次排列，表现出“祖先”与“后代”之间的派生关系；
+- **图**则由节点和边构成，反映了复杂的网络关系。
+
 
 逻辑结构可分为“线性”和“非线性”两大类。线性结构比较直观，指数据在逻辑关系上呈线性排列；非线性结构则相反，呈非线性排列。
 
@@ -556,6 +740,8 @@ transition: slide-up
 - **非线性数据结构**：树、堆、图、哈希表。
 
 非线性数据结构可以进一步划分为树形结构和网状结构。
+
+</v-clicks>
 
 ---
 layout: image
@@ -570,7 +756,11 @@ transition: slide-left
 
 ## 物理结构：连续与分散
 
-**当算法程序运行时，正在处理的数据主要存储在内存中**。下图展示了一个计算机内存条，其中每个黑色方块都包含一块内存空间。我们可以将内存想象成一个巨大的 Excel 表格，其中每个单元格都可以存储一定大小的数据。
+**当算法程序运行时，正在处理的数据主要存储在内存中**。
+
+下图展示了一个计算机内存条，其中每个黑色方块都包含一块内存空间。我们可以将内存想象成一个巨大的 Excel 表格，其中每个单元格都可以存储一定大小的数据。
+
+>值得说明的是，将内存比作 Excel 表格是一个简化的类比，实际内存的工作机制比较复杂，涉及地址空间、内存管理、缓存机制、虚拟内存和物理内存等概念。
 
 ---
 
@@ -578,9 +768,7 @@ transition: slide-left
 
 **系统通过内存地址来访问目标位置的数据**。如下图所示，计算机根据特定规则为表格中的每个单元格分配编号，确保每个内存空间都有唯一的内存地址。有了这些地址，程序便可以访问内存中的数据。
 
->值得说明的是，将内存比作 Excel 表格是一个简化的类比，实际内存的工作机制比较复杂，涉及地址空间、内存管理、缓存机制、虚拟内存和物理内存等概念。
-
-<img style="height: 80%; margin: auto;" src="/classification_of_data_structure/computer_memory_location.png"/>
+<img style="height: 90%; margin: auto;" src="/classification_of_data_structure/computer_memory_location.png"/>
 
 
 ---

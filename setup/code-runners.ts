@@ -25,21 +25,30 @@ export default defineCodeRunnersSetup(() => {
             try {
                 const pyodide = await loadPyodideAndPackages();
 
-                // Redirect stdout to a variable
-                pyodide.runPython(`
+                // Redirect stdout to a variable and ensure isolation
+                const result = await pyodide.runPythonAsync(`
                     import sys
                     from io import StringIO
-                    sys.stdout = StringIO()
+
+                    # Create a new StringIO object for this execution
+                    output_buffer = StringIO()
+                    sys.stdout = output_buffer
+
+                    # Run the user code
+                    exec(${JSON.stringify(code)})
+
+                    # Get the output and reset stdout
+                    output = output_buffer.getvalue()
+                    sys.stdout = sys.__stdout__
+
+                    output
                 `);
 
-                // Run the user code
-                await pyodide.runPythonAsync(code);
-
-                // Get the stdout content
-                const output = pyodide.runPython('sys.stdout.getvalue()');
+                // Wrap the result in a <pre> tag to preserve newlines
+                const formattedResult = `<pre>${result}</pre>`;
 
                 return {
-                    text: output
+                    html: formattedResult
                 };
             } catch (error) {
                 return {
